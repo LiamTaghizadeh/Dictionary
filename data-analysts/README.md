@@ -349,8 +349,8 @@ keydown.addEventListener         // میانبرهای صفحه‌کلید (Ctrl
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/ساخته_شده_با-❤️-c8ff00?style=for-the-badge&labelColor=08090d" />
-  <img src="https://img.shields.io/badge/برای-متخصصان_داده-8b90a8?style=for-the-badge&labelColor=08090d" />
-  <img src="https://img.shields.io/badge/اجرای_زنده-4a4f68?style=for-the-badge&labelColor=08090d" />
+  <img src="https://img.shields.io/badge/ساخته_شده_با-❤️-c8ff00?style=for-the-badge&labelColor=08090d" alt="ساخته شده با" />
+  <img src="https://img.shields.io/badge/برای-متخصصان_داده-8b90a8?style=for-the-badge&labelColor=08090d" alt="برای" />
+  <img src="https://img.shields.io/badge/اجرای_زنده-4a4f68?style=for-the-badge&labelColor=08090d" alt="اجرای زنده" />
 </p>
 
