@@ -14,7 +14,7 @@
   <img src="https://img.shields.io/badge/Terms-101%2B-c8ff00?style=for-the-badge&labelColor=08090d" alt="Terms" />
   <img src="https://img.shields.io/badge/Alphabet-26%20Letters-8b90a8?style=for-the-badge&labelColor=08090d" alt="Alphabet" />
   <img src="https://img.shields.io/badge/Search-Real%20Time-4a4f68?style=for-the-badge&labelColor=08090d" alt="Search" />
-  <img src="https://img.shields.io/badge/Author-Willie%20Conway-c8ff00?style=for-the-badge&labelColor=08090d" alt="Author" />
+  <img src="https://img.shields.io/badge/Author-ٍEsmail%20taghizadeh-c8ff00?style=for-the-badge&labelColor=08090d" alt="Author" />
 </p>
 
 ---
