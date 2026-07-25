@@ -2,18 +2,19 @@
 # 📊 واژه‌نامه مبانی آمار
 
 ![alt text](Screenshots/Statistics_Fundamentals.png)
-
-![مبانی آمار](https://img.shields.io/badge/مبانی_آمار-واژه‌نامه-c8ff00?style=for-the-badge&logo=statista&logoColor=black)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![علم داده](https://img.shields.io/badge/علم_داده-مفاهیم_اساسی-4a4f68?style=for-the-badge&logo=databricks&logoColor=white)
+<p align="center">
+  <img src="https://img.shields.io/badge/Statistics-Glossary-c8ff00?style=for-the-badge&logo=statista&logoColor=black&labelColor=08090d" alt="Statistics Glossary" />
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white&labelColor=08090d" alt="HTML5" />
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white&labelColor=08090d" alt="CSS3" />
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black&labelColor=08090d" alt="JavaScript" />
+  <img src="https://img.shields.io/badge/Data%20Science-Essentials-4a4f68?style=for-the-badge&logo=databricks&logoColor=white&labelColor=08090d" alt="Data Science" />
+</p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/تعداد_واژه‌ها-۶۴%2B-c8ff00?style=for-the-badge&labelColor=08090d" />
-  <img src="https://img.shields.io/badge/حروف_الفبا-۲۶_حرف-8b90a8?style=for-the-badge&labelColor=08090d" />
-  <img src="https://img.shields.io/badge/جستجو-بی‌درنگ-4a4f68?style=for-the-badge&labelColor=08090d" />
-  <img src="https://img.shields.io/badge/نویسنده-ویلی_کانوی-c8ff00?style=for-the-badge&labelColor=08090d" />
+  <img src="https://img.shields.io/badge/Terms-101%2B-c8ff00?style=for-the-badge&labelColor=08090d" alt="Terms" />
+  <img src="https://img.shields.io/badge/Alphabet-26%20Letters-8b90a8?style=for-the-badge&labelColor=08090d" alt="Alphabet" />
+  <img src="https://img.shields.io/badge/Search-Real%20Time-4a4f68?style=for-the-badge&labelColor=08090d" alt="Search" />
+  <img src="https://img.shields.io/badge/Author-Willie%20Conway-c8ff00?style=for-the-badge&labelColor=08090d" alt="Author" />
 </p>
 
 ---
