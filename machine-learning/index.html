@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Machine Learning Glossary</title>
+
+  <!-- Clean sans-serif font for English -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===== Base styles ===== */
+    :root {
+      --bg:       #08090d;
+      --bg2:      #0e1018;
+      --bg3:      #14161f;
+      --bg4:      #1c1f2e;
+      --lime:     #c8ff00;
+      --lime2:    #a8d600;
+      --lime-dim: rgba(200,255,0,0.08);
+      --lime-glow:rgba(200,255,0,0.18);
+      --white:    #f0f2f8;
+      --grey:     #8b90a8;
+      --grey2:    #4a4f68;
+      --border:   rgba(255,255,255,0.07);
+      --border2:  rgba(255,255,255,0.12);
+      --body:     'Inter', -apple-system, sans-serif;
+      --mono:     'Inter', monospace;
+    }
+
+    *,
+    *::before,
+    *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: var(--grey2); border-radius: 4px; }
+
+    body {
+      font-family: var(--body);
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(200,255,0,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,255,0,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top banner */
+    .banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: 52px;
+      background: rgba(8,9,13,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      gap: 24px;
+    }
+    .banner-logo {
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--lime);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .banner-sep { width: 1px; height: 20px; background: var(--border2); flex-shrink:0; }
+
+    .search-wrap {
+      flex: 1;
+      max-width: 460px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-icon {
+      position: absolute;
+      right: 0;
+      color: var(--grey);
+      width: 16px; height: 16px;
+      pointer-events: none;
+      flex-shrink: 0;
+    }
+    #searchInput {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--grey2);
+      padding: 6px 26px 6px 0;
+      font-family: var(--mono);
+      font-weight: 400;
+      font-size: 0.8rem;
+      color: var(--white);
+      outline: none;
+      transition: border-color .2s;
+      text-align: left;
+    }
+    #searchInput::placeholder { color: var(--grey2); }
+    #searchInput:focus { border-bottom-color: var(--lime); }
+
+    .banner-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .banner-stat {
+      font-family: var(--mono);
+      font-weight: 400;
+      font-size: 0.68rem;
+      color: var(--grey);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .banner-stat strong { font-weight: 700; color: var(--lime); }
+
+    .reset-btn {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid var(--grey2);
+      border-radius: 4px;
+      color: var(--grey);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .reset-btn:hover { border-color: var(--lime); color: var(--lime); }
+
+    /* Page layout */
+    .page {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      min-height: 100vh;
+      padding-top: 52px;
+    }
+
+    /* Letter navigation (right side) */
+    .letter-nav {
+      position: fixed;
+      top: 52px;
+      right: 0;
+      width: 64px;
+      height: calc(100vh - 52px);
+      background: var(--bg2);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 2px;
+      overflow-y: auto;
+      z-index: 100;
+      scrollbar-width: none;
+    }
+    .letter-nav::-webkit-scrollbar { display:none; }
+
+    .lnav-btn {
+      width: 40px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 0.72rem;
+      color: var(--grey2);
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all .14s;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .lnav-btn:hover:not(.no-terms) {
+      background: var(--lime-dim);
+      color: var(--lime);
+    }
+    .lnav-btn.active {
+      background: var(--lime);
+      color: var(--bg);
+      box-shadow: 0 0 12px var(--lime-glow);
+    }
+    .lnav-btn.no-terms { opacity: 0.2; cursor: default; }
+
+    .lnav-all {
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      width: 40px; height: 28px;
+      margin-bottom: 10px;
+    }
+    .lnav-sep {
+      width: 24px; height: 1px;
+      background: var(--border);
+      margin: 6px 0;
+      flex-shrink: 0;
+    }
+
+    /* Main content */
+    .main {
+      margin-right: 64px;
+      flex: 1;
+      max-width: 100%;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 72px 64px 60px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg-text {
+      position: absolute;
+      bottom: -30px;
+      left: -20px;
+      font-family: var(--body);
+      font-weight: 900;
+      font-size: clamp(120px, 18vw, 220px);
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(200,255,0,0.06);
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -0.05em;
+    }
+    .hero-kicker {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-kicker::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--lime);
+    }
+    .hero-title {
+      font-family: var(--body);
+      font-weight: 900;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--lime);
+    }
+    .hero-subtitle {
+      font-family: var(--body);
+      font-weight: 300;
+      font-size: 1rem;
+      color: var(--grey);
+      margin-bottom: 36px;
+      max-width: 560px;
+      line-height: 1.6;
+    }
+    .hero-chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border: 1px solid var(--border2);
+      border-radius: 100px;
+      font-family: var(--mono);
+      font-weight: 400;
+      font-size: 0.68rem;
+      color: var(--grey);
+      background: var(--bg2);
+    }
+    .chip-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--lime);
+      box-shadow: 0 0 6px var(--lime);
+      flex-shrink: 0;
+    }
+    .chip strong { color: var(--white); font-weight: 600; }
+
+    /* Terms area */
+    .terms-area {
+      padding: 0 64px 80px;
+    }
+    .letter-group {
+      margin-top: 56px;
+      animation: groupIn .35s ease both;
+    }
+    @keyframes groupIn {
+      from { opacity:0; transform: translateY(16px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    .group-header {
+      display: flex;
+      align-items: flex-end;
+      gap: 20px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .group-letter {
+      font-family: var(--body);
+      font-weight: 900;
+      font-size: 4.5rem;
+      line-height: 1;
+      color: var(--lime);
+      letter-spacing: -0.03em;
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+    .group-meta {
+      padding-bottom: 8px;
+    }
+    .group-label {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--grey2);
+      margin-bottom: 4px;
+    }
+    .group-count {
+      font-family: var(--body);
+      font-weight: 300;
+      font-size: 0.88rem;
+      color: var(--grey);
+    }
+
+    /* Cards */
+    .terms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 12px;
+    }
+    .term-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s, background .2s, transform .2s, box-shadow .2s;
+      animation: cardIn .3s ease both;
+      cursor: pointer;
+    }
+    @keyframes cardIn {
+      from { opacity:0; transform: translateY(8px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    .term-card::before {
+      content: '';
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--lime);
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .term-card:hover {
+      border-color: rgba(200,255,0,0.25);
+      background: var(--bg4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,.4), 0 0 0 1px rgba(200,255,0,0.1);
+    }
+    .term-card:hover::before { opacity: 1; }
+
+    .tc-watermark {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--body);
+      font-weight: 900;
+      font-size: 5rem;
+      line-height: 1;
+      color: rgba(200,255,0,0.04);
+      pointer-events: none;
+      user-select: none;
+      transition: color .2s;
+      text-transform: uppercase;
+    }
+    .term-card:hover .tc-watermark { color: rgba(200,255,0,0.07); }
+
+    .tc-term {
+      font-family: var(--body);
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--white);
+      margin-bottom: 4px;
+      line-height: 1.2;
+      position: relative;
+    }
+    .tc-pron {
+      font-family: var(--mono);
+      font-weight: 400;
+      font-size: 0.72rem;
+      color: var(--grey2);
+      margin-bottom: 10px;
+      letter-spacing: 0.04em;
+    }
+    .tc-def {
+      font-family: var(--body);
+      font-weight: 300;
+      font-size: 0.88rem;
+      color: var(--grey);
+      line-height: 1.75;
+      position: relative;
+    }
+    mark.hl {
+      background: rgba(200,255,0,0.22);
+      color: var(--lime);
+      border-radius: 2px;
+      padding: 0 2px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 100px 40px;
+      color: var(--grey2);
+    }
+    .empty-char {
+      font-family: var(--body);
+      font-weight: 900;
+      font-size: 8rem;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--border2);
+      display: block;
+      margin-bottom: 20px;
+      line-height: 1;
+    }
+    .empty h3 {
+      font-family: var(--body);
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--grey);
+      margin-bottom: 8px;
+    }
+    .empty p {
+      font-weight: 300;
+      font-size: 0.88rem;
+      color: var(--grey2);
+    }
+
+    /* Footer */
+    footer {
+      margin-right: 64px;
+      border-top: 1px solid var(--border);
+      padding: 32px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-brand {
+      font-family: var(--body);
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--white);
+    }
+    .footer-brand em { font-style: italic; color: var(--lime); }
+    .footer-info {
+      font-family: var(--mono);
+      font-weight: 400;
+      font-size: 0.68rem;
+      color: var(--grey2);
+      letter-spacing: 0.08em;
+      text-align: right;
+      line-height: 1.8;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      max-width: 640px;
+      width: 100%;
+      padding: 40px 44px;
+      position: relative;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+      animation: modalIn .25s ease both;
+    }
+    @keyframes modalIn {
+      from { opacity:0; transform: scale(0.96) translateY(12px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+    .modal-close {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      background: transparent;
+      border: none;
+      color: var(--grey2);
+      font-size: 1.6rem;
+      cursor: pointer;
+      transition: color .2s;
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--white); }
+
+    .modal-term {
+      font-family: var(--body);
+      font-weight: 700;
+      font-size: 2.2rem;
+      color: var(--white);
+      margin-bottom: 6px;
+      padding-right: 30px;
+    }
+    .modal-term .lime { color: var(--lime); }
+    .modal-pron {
+      font-family: var(--mono);
+      font-weight: 400;
+      font-size: 0.9rem;
+      color: var(--grey2);
+      margin-bottom: 18px;
+      letter-spacing: 0.06em;
+    }
+    .modal-def {
+      font-family: var(--body);
+      font-weight: 300;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--grey);
+    }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .letter-nav { display: none; }
+      .main, footer { margin-right: 0; }
+      .hero { padding: 48px 24px 40px; }
+      .terms-area { padding: 0 24px 60px; }
+      .terms-grid { grid-template-columns: 1fr; }
+      .banner { padding: 0 20px; }
+      .banner-stat { display: none; }
+      footer { padding: 24px; margin-right: 0; }
+    }
+    @media (max-width: 500px) {
+      .hero-title { font-size: 2.4rem; }
+      .modal-box { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Banner -->
+  <div class="banner">
+    <div class="banner-logo">ML · Glossary</div>
+    <div class="banner-sep"></div>
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l-3-3"/>
+      </svg>
+      <input id="searchInput" type="text" placeholder="Search term or definition…" autocomplete="off">
+    </div>
+    <div class="banner-actions">
+      <div class="banner-stat">Showing <strong id="bCount">0</strong> of <strong id="bTotal">0</strong></div>
+      <button class="reset-btn" id="resetBtn">↺ Reset</button>
+    </div>
+  </div>
+
+  <div class="page">
+
+    <!-- Letter navigation -->
+    <nav class="letter-nav" id="letterNav">
+      <button class="lnav-btn lnav-all active" data-l="all">All</button>
+      <div class="lnav-sep"></div>
+      <!-- Buttons built by JS -->
+    </nav>
+
+    <!-- Main content -->
+    <div class="main">
+
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero-bg-text">∇</div>
+        <div class="hero-kicker">AI Academy</div>
+        <h1 class="hero-title">Machine<br><em>Learning</em></h1>
+        <p class="hero-subtitle">
+          An alphabetical reference of fundamental machine learning concepts, models, and algorithms for data scientists, AI engineers, and students.
+        </p>
+        <div class="hero-chips">
+          <div class="chip"><div class="chip-dot"></div><strong id="chipCount">0</strong>&nbsp;defined terms</div>
+          <div class="chip"><div class="chip-dot"></div>⏱ ~12 min read</div>
+          <div class="chip"><div class="chip-dot"></div>Author:&nbsp;<strong>Esmail Taghizadeh</strong></div>
+        </div>
+      </section>
+
+      <!-- Terms area -->
+      <div class="terms-area" id="termsArea">
+        <!-- Dynamically rendered -->
+      </div>
+
+      <!-- Supplementary section: Search & Algorithms -->
+      <div class="terms-area" style="padding-top:0;">
+        <div class="letter-group">
+          <div class="group-header">
+            <div class="group-letter">∑</div>
+            <div class="group-meta">
+              <div class="group-label">Supplementary</div>
+              <div class="group-count">Search &amp; ML Algorithms · 16 items</div>
+            </div>
+          </div>
+          <div class="terms-grid" id="suppGrid">
+            <!-- Static cards for algorithms – will be handled like terms but they are static in original. I'll keep them static but add pronunciation manually -->
+            <!-- I'll rewrite these with English translations and pronunciations -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-brand">AI <em>Academy</em></div>
+    <div class="footer-info">
+      Machine Learning Glossary<br />
+      Author: Esmail Taghizadeh
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="termModal">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-term" id="modalTermTitle">Title</div>
+      <div class="modal-pron" id="modalTermPron">/pronunciation/</div>
+      <div class="modal-def" id="modalTermDef">Definition</div>
+    </div>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════
+    //  GLOSSARY DATA (English + IPA pronunciation)
+    // ═══════════════════════════════════════════
+    const TERMS = [
+      { term: "Machine Learning", pron: "/məˈʃiːn ˈlɜːrnɪŋ/", def: "A branch of AI where systems learn from data and improve performance on a task without explicit programming." },
+      { term: "Supervised Learning", pron: "/ˈsuːpərvaɪzd ˈlɜːrnɪŋ/", def: "A type of ML where the model learns from labelled data (input–output pairs) to make predictions on new data." },
+      { term: "Unsupervised Learning", pron: "/ʌnˈsuːpərvaɪzd ˈlɜːrnɪŋ/", def: "ML in which the model discovers hidden patterns or structures in unlabelled data, e.g. clustering." },
+      { term: "Semi-supervised Learning", pron: "/ˌsemiˈsuːpərvaɪzd ˈlɜːrnɪŋ/", def: "A method that uses a small amount of labelled data together with a large amount of unlabelled data for training." },
+      { term: "Reinforcement Learning", pron: "/ˌriːɪnˈfɔːrsmənt ˈlɜːrnɪŋ/", def: "Learning where an agent interacts with an environment, receiving rewards or penalties, to learn an optimal policy." },
+      { term: "Deep Learning", pron: "/diːp ˈlɜːrnɪŋ/", def: "A subfield of ML based on multi‑layer neural networks that automatically learn complex features from raw data." },
+      { term: "Artificial Neural Network", pron: "/ˌɑːrtɪˈfɪʃl ˈnʊərəl ˈnetwɜːrk/", def: "A computational model inspired by the brain, composed of layers of interconnected neurons that learn weights from data." },
+      { term: "Perceptron", pron: "/pərˈseptrɒn/", def: "The simplest neural unit that sums weighted inputs and passes the result through an activation function." },
+      { term: "Multi‑layer Perceptron (MLP)", pron: "/ˈmʌltiˌleɪər pərˈseptrɒn/", def: "A feedforward neural network with one or more hidden layers, capable of modeling complex non‑linear relationships." },
+      { term: "Hidden Layer", pron: "/ˈhɪdn ˈleɪər/", def: "A layer between input and output that constructs intermediate representations and more abstract features." },
+      { term: "Activation Function", pron: "/ˌæktɪˈveɪʃn ˈfʌŋkʃn/", def: "A non‑linear function applied to each neuron's output, enabling the network to learn non‑linear relationships." },
+      { term: "Sigmoid Function", pron: "/ˈsɪɡmɔɪd ˈfʌŋkʃn/", def: "An activation that squashes output to (0,1), commonly used for binary classification." },
+      { term: "ReLU (Rectified Linear Unit)", pron: "/ˈrɛluː/", def: "An activation that outputs zero for negative inputs and passes positive inputs unchanged; the most widely used activation in deep learning." },
+      { term: "Tanh (Hyperbolic Tangent)", pron: "/tænʃ/", def: "An activation that squashes output to (-1,1); more symmetric about zero than sigmoid." },
+      { term: "Softmax", pron: "/ˈsɒftmæks/", def: "A function that converts a raw output vector into a probability distribution over multiple classes." },
+      { term: "Weight", pron: "/weɪt/", def: "A learnable parameter that determines the strength of a connection between neurons; updated during training." },
+      { term: "Bias", pron: "/ˈbaɪəs/", def: "An additional constant added to the weighted sum of a neuron's inputs, giving the model more flexibility." },
+      { term: "Gradient Descent", pron: "/ˈɡreɪdiənt dɪˈsent/", def: "An optimisation algorithm that updates model parameters step‑by‑step in the opposite direction of the cost function's gradient to minimise error." },
+      { term: "Stochastic Gradient Descent (SGD)", pron: "/stəˈkæstɪk ˈɡreɪdiənt dɪˈsent/", def: "A version of gradient descent that updates parameters using one or a few random samples per step." },
+      { term: "Mini‑batch Gradient Descent", pron: "/ˈmɪniˌbætʃ ˈɡreɪdiənt dɪˈsent/", def: "A middle‑ground method that updates parameters using a small subset (mini‑batch) of data per step." },
+      { term: "Backpropagation", pron: "/ˈbækˌprɒpəˈɡeɪʃn/", def: "An algorithm that propagates the output error backward through the network using the chain rule to compute the gradient of each weight." },
+      { term: "Learning Rate", pron: "/ˈlɜːrnɪŋ reɪt/", def: "A hyperparameter that controls the step size of parameter updates in each iteration of gradient descent." },
+      { term: "Epoch", pron: "/ˈiːpɒk/", def: "One complete pass of the entire training dataset through the model during training." },
+      { term: "Batch", pron: "/bætʃ/", def: "A subset of training data used in one optimisation step to update the model." },
+      { term: "Batch Size", pron: "/bætʃ saɪz/", def: "The number of training samples used in one update step." },
+      { term: "Cost Function", pron: "/kɒst ˈfʌŋkʃn/", def: "A function that measures the discrepancy between the model's predictions and the true values; minimising it is the training objective." },
+      { term: "Cross‑entropy", pron: "/ˌkrɒsˈɛntrəpi/", def: "A common cost function for classification that measures the difference between the predicted probability distribution and the true label distribution." },
+      { term: "Optimiser", pron: "/ˈɒptɪmaɪzər/", def: "An algorithm that determines how to update model parameters to minimise the cost function; e.g. SGD, Adam." },
+      { term: "Adam Optimiser", pron: "/ˈædəm ˈɒptɪmaɪzər/", def: "An optimisation method that combines momentum and adaptive learning rates per parameter, often converging faster than plain SGD." },
+      { term: "Momentum", pron: "/məˈmentəm/", def: "A technique that accumulates past gradients to reduce oscillations and speed up convergence." },
+      { term: "RMSprop", pron: "/ˌɑːrɛmˈɛsprɒp/", def: "An optimiser that adapts the learning rate for each parameter based on the moving average of recent squared gradients." },
+      { term: "Learning Rate Schedule", pron: "/ˈlɜːrnɪŋ reɪt ˈʃedjuːl/", def: "A strategy to gradually decrease or change the learning rate during training to improve convergence and stability." },
+      { term: "Weight Decay", pron: "/weɪt dɪˈkeɪ/", def: "A regularisation technique that adds a penalty proportional to the size of weights to the cost function, discouraging large weights." },
+      { term: "Overfitting", pron: "/ˌəʊvərˈfɪtɪŋ/", def: "A situation where the model learns training data noise and details too well, performing poorly on new data (poor generalisation)." },
+      { term: "Underfitting", pron: "/ˌʌndərˈfɪtɪŋ/", def: "A situation where the model is too simple to capture the underlying patterns, resulting in high error on both training and test data." },
+      { term: "Regularisation", pron: "/ˌreɡjʊlərəˈzeɪʃn/", def: "A set of techniques that constrain model complexity to prevent overfitting and improve generalisation." },
+      { term: "L1 Regularisation (Lasso)", pron: "/ɛl wʌn ˌreɡjʊlərəˈzeɪʃn/", def: "Adds the absolute value of weights to the cost function, driving some weights exactly to zero (automatic feature selection)." },
+      { term: "L2 Regularisation (Ridge)", pron: "/ɛl tuː ˌreɡjʊlərəˈzeɪʃn/", def: "Adds the squared value of weights to the cost function, shrinking weights towards zero without making them exactly zero." },
+      { term: "Dropout", pron: "/ˈdrɒpaʊt/", def: "A regularisation technique that randomly deactivates a fraction of neurons during each training step, reducing co‑dependency." },
+      { term: "Batch Normalisation", pron: "/bætʃ ˌnɔːrmələˈzeɪʃn/", def: "A technique that normalises the output of each layer during training, leading to faster and more stable convergence." },
+      { term: "Early Stopping", pron: "/ˈɜːrli ˈstɒpɪŋ/", def: "A method that stops training when validation error stops improving, to prevent overfitting." },
+      { term: "Cross‑validation", pron: "/ˌkrɒsˌvæljuˈeɪʃn/", def: "A model evaluation method that splits data into folds and rotates them for training and testing to obtain a more robust performance estimate." },
+      { term: "Train‑Test Split", pron: "/treɪn test splɪt/", def: "The process of dividing data into separate sets for training the model and evaluating its final performance on unseen data." },
+      { term: "Validation Set", pron: "/ˌvælɪˈdeɪʃn set/", def: "A subset separate from the training data, used for tuning hyperparameters and monitoring overfitting during training." },
+      { term: "Hyperparameter", pron: "/ˌhaɪpərpəˈræmɪtər/", def: "A configuration setting specified before training that is not learned from data; e.g. learning rate, tree depth." },
+      { term: "Grid Search", pron: "/ɡrɪd sɜːrtʃ/", def: "A hyperparameter tuning method that systematically tests all combinations of predefined values." },
+      { term: "Random Search", pron: "/ˈrændəm sɜːrtʃ/", def: "A hyperparameter tuning method that randomly samples combinations from the search space and evaluates them." },
+      { term: "Bayesian Optimisation", pron: "/beɪˈziːən ˌɒptɪmaɪˈzeɪʃn/", def: "A probabilistic method for hyperparameter tuning that intelligently guides the search by modelling past evaluation results." },
+      { term: "Feature Engineering", pron: "/ˈfiːtʃər ˌendʒɪˈnɪərɪŋ/", def: "The process of creating, transforming, or selecting appropriate features from raw data to improve model performance." },
+      { term: "Feature Scaling", pron: "/ˈfiːtʃər ˈskeɪlɪŋ/", def: "Transforming numerical features to a common scale so that scale‑sensitive algorithms perform better." },
+      { term: "Normalisation", pron: "/ˌnɔːrmələˈzeɪʃn/", def: "Scaling feature values to a fixed range, typically [0,1], to unify the scale of variables." },
+      { term: "Standardisation", pron: "/ˌstændərdaɪˈzeɪʃn/", def: "Transforming data to have zero mean and unit variance; common for distance‑based and gradient‑based algorithms." },
+      { term: "One‑Hot Encoding", pron: "/wʌn hɒt ɪnˈkəʊdɪŋ/", def: "A method of converting categorical variables into binary vectors where only one component is 1 and the rest are 0." },
+      { term: "Label Encoding", pron: "/ˈleɪbl ɪnˈkəʊdɪŋ/", def: "A method of converting categorical values into consecutive integers; suitable for ordinal variables." },
+      { term: "Embedding", pron: "/ɪmˈbedɪŋ/", def: "A dense, compressed numerical representation of discrete data (e.g. words) in a vector space that preserves semantic relationships." },
+      { term: "Tokenisation", pron: "/ˌtəʊkənaɪˈzeɪʃn/", def: "The process of splitting text into smaller units such as words or subwords before being processed by a model." },
+      { term: "Bag of Words", pron: "/bæɡ əv wɜːrdz/", def: "A text representation method that counts word frequencies while ignoring word order." },
+      { term: "TF‑IDF", pron: "/ˌtiːˈɛf ˌaɪˈdiːˈɛf/", def: "A statistical measure that weights the importance of a word in a document relative to a whole collection." },
+      { term: "Natural Language Processing (NLP)", pron: "/ˈnætʃrəl ˈlæŋɡwɪdʒ ˈprəʊsesɪŋ/", def: "A branch of AI concerned with enabling machines to understand, generate, and process human language." },
+      { term: "Computer Vision", pron: "/kəmˈpjuːtər ˈvɪʒn/", def: "A branch of AI that deals with understanding, analysing, and extracting information from images and video." },
+      { term: "Convolutional Neural Network (CNN)", pron: "/ˌkɒnvəˈluːʃənl ˈnʊərəl ˈnetwɜːrk/", def: "A neural network architecture suited for grid‑like data (e.g. images), using convolution filters to extract spatial features." },
+      { term: "Convolution Layer", pron: "/ˌkɒnvəˈluːʃn ˈleɪər/", def: "A layer in a CNN that applies small filters to the input to detect local patterns such as edges and textures." },
+      { term: "Pooling Layer", pron: "/ˈpuːlɪŋ ˈleɪər/", def: "A layer that reduces the spatial dimensions of feature maps by aggregating neighbouring values (e.g. max or average)." },
+      { term: "Stride", pron: "/straɪd/", def: "The step size with which a convolution filter moves across the input, affecting the output dimensions." },
+      { term: "Kernel (Filter)", pron: "/ˈkɜːrnl/", def: "A small learnable matrix in a convolution layer that is applied to the input to extract a specific type of feature." },
+      { term: "Recurrent Neural Network (RNN)", pron: "/rɪˈkɜːrənt ˈnʊərəl ˈnetwɜːrk/", def: "A neural network architecture suitable for sequential data, where the output at each step depends on the hidden state from the previous step." },
+      { term: "Long Short‑Term Memory (LSTM)", pron: "/lɒŋ ʃɔːrt tɜːrm ˈmeməri/", def: "A type of RNN with special gates that mitigates the vanishing gradient problem and learns long‑range dependencies better." },
+      { term: "Gated Recurrent Unit (GRU)", pron: "/ˈɡeɪtɪd rɪˈkɜːrənt ˈjuːnɪt/", def: "A simplified version of LSTM with fewer gates, training faster while achieving similar performance." },
+      { term: "Transformer", pron: "/trænsˈfɔːrmər/", def: "A neural architecture based on the attention mechanism that models long‑range dependencies in sequences in parallel, without recurrence." },
+      { term: "Attention Mechanism", pron: "/əˈtenʃn ˈmekənɪzəm/", def: "A method that allows a model to weigh different parts of the input differently when processing each element." },
+      { term: "Self‑Attention", pron: "/self əˈtenʃn/", def: "An attention mechanism that measures the relationship between each element of a sequence and all other elements in the same sequence; the core of Transformers." },
+      { term: "Encoder‑Decoder", pron: "/ɪnˈkəʊdər diːˈkəʊdər/", def: "An architecture where the encoder compresses the input into a representation and the decoder generates the final output from that representation." },
+      { term: "Generative Adversarial Network (GAN)", pron: "/ˈdʒenərətɪv ədˈvɜːrsəriəl ˈnetwɜːrk/", def: "An architecture with two networks, a generator and a discriminator, that compete with each other to produce realistic data." },
+      { term: "Autoencoder", pron: "/ˈɔːtəʊɪnkəʊdər/", def: "A neural network that learns to compress input into a lower‑dimensional representation and then reconstruct it; used for dimensionality reduction and anomaly detection." },
+      { term: "Transfer Learning", pron: "/ˈtrænsfɜːr ˈlɜːrnɪŋ/", def: "Using knowledge from a pre‑trained model on one task to improve learning on a different but related task." },
+      { term: "Fine‑Tuning", pron: "/faɪn ˈtjuːnɪŋ/", def: "The process of further training a pre‑trained model on a new, specific dataset to adapt it to a particular task." },
+      { term: "Data Augmentation", pron: "/ˈdeɪtə ˌɔːɡmenˈteɪʃn/", def: "A technique that increases the diversity of training data by applying transformations (e.g. rotation, cropping, noise) without collecting new data." },
+      { term: "Class Imbalance", pron: "/klɑːs ɪmˈbæləns/", def: "A situation where one class in the training data is much more or less frequent than others." },
+      { term: "Confusion Matrix", pron: "/kənˈfjuːʒn ˈmeɪtrɪks/", def: "A table that shows the counts of correct and incorrect predictions broken down by actual and predicted classes." },
+      { term: "Precision", pron: "/prɪˈsɪʒn/", def: "The ratio of true positive predictions to all positive predictions made by the model; measures the accuracy of positive predictions." },
+      { term: "Recall", pron: "/rɪˈkɔːl/", def: "The ratio of true positive predictions to all actual positive instances; measures the model's ability to find all positive cases." },
+      { term: "F1 Score", pron: "/ɛf wʌn skɔːr/", def: "The harmonic mean of precision and recall, providing a single balanced metric for classification performance." },
+      { term: "Accuracy", pron: "/ˈækjərəsi/", def: "The ratio of correct predictions to total predictions; can be misleading for imbalanced datasets." },
+      { term: "ROC Curve", pron: "/ɑːr əʊ siː kɜːrv/", def: "A plot of the true positive rate against the false positive rate at various threshold settings." },
+      { term: "AUC (Area Under the Curve)", pron: "/ˌeɪjuːˈsiː/", def: "The area under the ROC curve, summarising the model's ability to distinguish between classes in a single number between 0 and 1." },
+      { term: "Bias‑Variance Trade‑off", pron: "/ˈbaɪəs ˈveəriəns ˈtreɪdɒf/", def: "The trade‑off between error due to bias (underfitting) and error due to variance (overfitting) when choosing model complexity." },
+      { term: "Ensemble Learning", pron: "/ɪnˈsɒmbl ˈlɜːrnɪŋ/", def: "Combining predictions from multiple base models to achieve better and more robust performance than any single model." },
+      { term: "Bagging", pron: "/ˈbæɡɪŋ/", def: "An ensemble method that trains multiple models on random subsamples of the data and averages or votes on their predictions." },
+      { term: "Boosting", pron: "/ˈbuːstɪŋ/", def: "An ensemble method that sequentially trains weak models, each correcting the errors of its predecessor." },
+      { term: "Stacking", pron: "/ˈstækɪŋ/", def: "An ensemble method that uses the outputs of several base models as inputs to a higher‑level model to produce the final prediction." },
+      { term: "Random Forest", pron: "/ˈrændəm ˈfɒrɪst/", def: "A bagging‑based ensemble method that builds many decision trees on random subsamples of data and features." },
+      { term: "Decision Tree", pron: "/dɪˈsɪʒn triː/", def: "A tree‑structured model that splits data recursively based on feature values, producing interpretable decision rules." },
+      { term: "Gradient Boosting", pron: "/ˈɡreɪdiənt ˈbuːstɪŋ/", def: "A boosting method that trains new models to predict the residual errors of previous models using the gradient of the cost function." },
+      { term: "XGBoost", pron: "/ˌɛksˈdʒiːbuːst/", def: "An optimised and widely used implementation of gradient boosting with high speed and advanced regularisation features." },
+      { term: "AdaBoost", pron: "/ˈeɪdəbuːst/", def: "A boosting algorithm that increases the weight of misclassified samples in each round to focus subsequent models on them." },
+      { term: "Support Vector Machine (SVM)", pron: "/səˈpɔːrt ˈvektər məˈʃiːn/", def: "A classification algorithm that finds the decision boundary with the largest possible margin between different classes." },
+      { term: "Kernel Trick", pron: "/ˈkɜːrnl trɪk/", def: "A technique in SVM that implicitly maps data to a higher‑dimensional space without explicit computation, enabling linear separation of non‑linearly separable data." },
+      { term: "K‑Nearest Neighbours (KNN)", pron: "/keɪ nɪərɪst ˈneɪbərz/", def: "An algorithm that classifies a new sample based on the majority vote of its k closest neighbours in the feature space." },
+      { term: "Naïve Bayes", pron: "/naɪˈiːv ˈbeɪz/", def: "A probabilistic classifier based on Bayes' theorem that assumes features are conditionally independent; fast and effective for text." },
+      { term: "Linear Regression", pron: "/ˈlɪniər rɪˈɡreʃn/", def: "A fundamental ML algorithm that estimates a linear relationship between input features and a continuous output variable." },
+      { term: "Logistic Regression", pron: "/ləˈdʒɪstɪk rɪˈɡreʃn/", def: "A classification algorithm that applies the sigmoid function to a linear combination of features to predict the probability of belonging to a class." },
+      { term: "K‑Means Clustering", pron: "/keɪ miːnz ˈklʌstərɪŋ/", def: "An unsupervised learning algorithm that partitions data into k clusters such that the distance of points to their cluster centre is minimised." },
+      { term: "Clustering", pron: "/ˈklʌstərɪŋ/", def: "The process of grouping similar samples into clusters without predefined labels." },
+      { term: "Principal Component Analysis (PCA)", pron: "/ˈprɪnsəpl kəmˈpəʊnənt əˈnæləsɪs/", def: "A dimensionality reduction method that transforms data into a new set of orthogonal components that retain the maximum variance." },
+      { term: "Dimensionality Reduction", pron: "/daɪˌmenʃəˈnæləti rɪˈdʌkʃn/", def: "The process of reducing the number of features while preserving as much information as possible, to reduce complexity and noise." },
+      { term: "Feature Selection", pron: "/ˈfiːtʃər sɪˈlekʃn/", def: "The process of identifying and retaining the most important features from the existing set to improve model performance and speed." },
+      { term: "Feature Importance", pron: "/ˈfiːtʃər ɪmˈpɔːrtns/", def: "A measure indicating how much each feature contributes to the predictions made by a model (e.g. in Random Forest)." },
+      { term: "Model Interpretability", pron: "/ˈmɒdl ɪnˌtɜːrprətəˈbɪləti/", def: "The degree to which a model's decision‑making process can be understood and explained to humans." },
+      { term: "Explainable AI (XAI)", pron: "/ɪkˈspleɪnəbl ˌeɪˈaɪ/", def: "A field that provides tools and methods to clarify and explain the decisions of complex ML models." },
+      { term: "Agent", pron: "/ˈeɪdʒənt/", def: "In reinforcement learning, an entity that observes the environment state, chooses actions, and learns from received rewards." },
+      { term: "Environment", pron: "/ɪnˈvaɪərənmənt/", def: "In RL, the space in which the agent operates; it produces new states and rewards based on the agent's actions." },
+      { term: "Reward", pron: "/rɪˈwɔːrd/", def: "A numerical feedback signal from the environment after each action; the agent's goal is to maximise cumulative reward over time." },
+      { term: "Policy", pron: "/ˈpɒləsi/", def: "A rule or function that determines the appropriate action for an agent based on the current state in RL." },
+      { term: "Value Function", pron: "/ˈvæljuː ˈfʌŋkʃn/", def: "A function in RL that estimates the expected cumulative reward from a state (or state–action pair)." },
+      { term: "Markov Decision Process (MDP)", pron: "/ˈmɑːrkɒv dɪˈsɪʒn ˈprəʊses/", def: "A mathematical framework for modelling RL problems, consisting of states, actions, rewards, and transition probabilities." },
+      { term: "Exploration vs Exploitation", pron: "/ˌekspləˈreɪʃn vɜːs ˌeksplɔɪˈteɪʃn/", def: "The fundamental dilemma in RL between trying new actions (exploration) and using the best known action (exploitation)." },
+      { term: "Epsilon‑Greedy", pron: "/ˈepsɪlɒn ˈɡredi/", def: "A simple strategy that balances exploration and exploitation by choosing a random action with small probability ε, otherwise the best known action." },
+      { term: "Q‑Learning", pron: "/kjuː ˈlɜːrnɪŋ/", def: "A model‑free RL algorithm that estimates the value of each state–action pair to find the optimal policy." },
+      { term: "Dataset", pron: "/ˈdeɪtəset/", def: "A structured collection of samples and associated features used for training or testing an ML model." },
+      { term: "Training Set", pron: "/ˈtreɪnɪŋ set/", def: "The portion of data used directly by the model to learn its parameters." },
+      { term: "Test Set", pron: "/test set/", def: "A separate portion of data used only for the final evaluation of the model on unseen samples." },
+      { term: "Label", pron: "/ˈleɪbl/", def: "The target value or correct answer that the model must predict for each sample in supervised learning." },
+      { term: "Feature", pron: "/ˈfiːtʃər/", def: "A measurable input variable used to describe a sample and fed to the model for prediction." },
+      { term: "Instance", pron: "/ˈɪnstəns/", def: "A single row or observation in the dataset, containing feature values (and possibly a label)." },
+      { term: "Model", pron: "/ˈmɒdl/", def: "A mathematical representation learned from data, used to make predictions or decisions on new data." },
+      { term: "Inference", pron: "/ˈɪnfərəns/", def: "The process of using a trained model to produce predictions on new, unseen data." },
+      { term: "Prediction", pron: "/prɪˈdɪkʃn/", def: "The output produced by a model for a given input sample based on what it learned during training." },
+      { term: "Generalisation", pron: "/ˌdʒenərəlaɪˈzeɪʃn/", def: "The ability of a model to perform well on new data that was not seen during training." },
+      { term: "Curse of Dimensionality", pron: "/kɜːrs əv daɪˌmenʃəˈnæləti/", def: "The phenomenon where the feature space volume grows so fast with the number of dimensions that data analysis and learning become difficult." },
+      { term: "Outlier", pron: "/ˈaʊtlaɪər/", def: "A sample with behaviour or values significantly different from the majority of the data, which can negatively affect training." },
+      { term: "Missing Data", pron: "/ˈmɪsɪŋ ˈdeɪtə/", def: "Values of features that were not recorded or collected for some samples in the dataset." },
+      { term: "Imputation", pron: "/ˌɪmpjuˈteɪʃn/", def: "The process of estimating and filling in missing values using statistics (mean, median) or predictive models." },
+      { term: "Machine Learning Pipeline", pron: "/məˈʃiːn ˈlɜːrnɪŋ ˈpaɪplaɪn/", def: "An automated sequence of steps including preprocessing, training, evaluation, and deployment of an ML model." },
+      { term: "MLOps", pron: "/ˌɛmˈɛlɒps/", def: "A set of practices and tools for managing the end‑to‑end lifecycle of ML models in production, from training to monitoring and updating." },
+      { term: "Model Deployment", pron: "/ˈmɒdl dɪˈplɔɪmənt/", def: "The process of making a trained model available for use in a real‑world application or service." },
+      { term: "Vectorisation", pron: "/ˌvektərəˈzeɪʃn/", def: "The process of converting raw data (e.g. text, images) into numerical vectors that can be processed by ML algorithms." },
+      { term: "Latent Space", pron: "/ˈleɪtnt speɪs/", def: "A compressed, abstract vector space where a model (e.g. an autoencoder) represents data." },
+      { term: "Decision Boundary", pron: "/dɪˈsɪʒn ˈbaʊndəri/", def: "The surface or curve that separates the feature space into regions belonging to different classes in a classification problem." },
+      { term: "Margin", pron: "/ˈmɑːrdʒɪn/", def: "In SVM, the distance between the decision boundary and the closest samples of each class; the algorithm aims to maximise this margin." },
+      { term: "Silhouette Score", pron: "/ˌsɪluˈet skɔːr/", def: "A metric for evaluating clustering quality, measuring how similar each sample is to its own cluster compared to other clusters." },
+      { term: "Elbow Method", pron: "/ˈelboʊ ˈmeθəd/", def: "A graphical method for choosing the optimal number of clusters in K‑Means by plotting within‑cluster error against the number of clusters." },
+      { term: "Hierarchical Clustering", pron: "/ˌhaɪəˈrɑːrkɪkl ˈklʌstərɪŋ/", def: "A clustering method that builds a tree‑like structure of clusters by successively merging or dividing samples." },
+      { term: "DBSCAN", pron: "/ˈdiːbiːskæn/", def: "A density‑based clustering algorithm that identifies clusters based on point density and can automatically detect outliers." },
+      { term: "Anomaly Detection", pron: "/əˈnɒməli dɪˈtekʃn/", def: "The process of identifying samples or patterns that differ significantly from normal behaviour." },
+      { term: "Recommender System", pron: "/rɪˈkɒmendər ˈsɪstəm/", def: "A system that analyses user behaviour or preferences to suggest relevant items or content to users." },
+      { term: "Collaborative Filtering", pron: "/kəˈlæbərətɪv ˈfɪltərɪŋ/", def: "A recommendation method that uses behavioural patterns from similar users to generate suggestions." },
+      { term: "Content‑Based Filtering", pron: "/ˈkɒntent beɪst ˈfɪltərɪŋ/", def: "A recommendation method that compares item features to suggest items similar to those the user liked in the past." },
+      { term: "Cold‑Start Problem", pron: "/ˌkəʊld ˈstɑːrt ˈprɒbləm/", def: "A challenge in recommender systems where insufficient data about a new user or item makes it difficult to provide accurate suggestions." },
+      { term: "Model Drift", pron: "/ˈmɒdl drɪft/", def: "The gradual decline in a deployed model's performance over time due to changes in real‑world data distribution compared to training data." },
+      { term: "Data Leakage", pron: "/ˈdeɪtə ˈliːkɪdʒ/", def: "An error where information from the test set or future is inadvertently used during training, making the model's evaluation unrealistically optimistic." },
+      { term: "Vanishing Gradient", pron: "/ˈvænɪʃɪŋ ˈɡreɪdiənt/", def: "A problem in deep networks where gradients become very small during backpropagation in early layers, stalling learning." },
+      { term: "Exploding Gradient", pron: "/ɪkˈspləʊdɪŋ ˈɡreɪdiənt/", def: "A problem in deep networks where gradients become excessively large during backpropagation, causing unstable training." },
+      { term: "Weight Initialisation", pron: "/weɪt ɪˌnɪʃəlaɪˈzeɪʃn/", def: "The strategy for setting initial weight values before training, which affects convergence speed and stability." },
+      { term: "Learning Curve", pron: "/ˈlɜːrnɪŋ kɜːrv/", def: "A plot showing training and validation error over time or against training set size, used to diagnose over/underfitting." },
+      { term: "Zero‑Shot Learning", pron: "/ˈzɪərəʊ ʃɒt ˈlɜːrnɪŋ/", def: "The ability of a model to perform a task or recognise a class without having seen any training examples of it." },
+      { term: "Few‑Shot Learning", pron: "/fjuː ʃɒt ˈlɜːrnɪŋ/", def: "The ability of a model to learn a new task from only a very small number of training examples." },
+      { term: "Prompt Engineering", pron: "/prɒmpt ˌendʒɪˈnɪərɪŋ/", def: "The process of designing and optimising textual input (prompts) to obtain the best output from large language models." },
+      { term: "Large Language Model (LLM)", pron: "/lɑːrdʒ ˈlæŋɡwɪdʒ ˈmɒdl/", def: "A deep learning model based on Transformers, trained on massive amounts of text, capable of understanding and generating natural language." },
+      { term: "Foundation Model", pron: "/faʊnˈdeɪʃn ˈmɒdl/", def: "A large model pre‑trained on broad, diverse data that can be fine‑tuned for a wide range of downstream tasks." },
+      { term: "Cosine Similarity", pron: "/ˈkəʊsaɪn ˌsɪmɪˈlærəti/", def: "A metric that measures the angle between two vectors (e.g. two embeddings) to indicate their semantic similarity." },
+      { term: "Local Minimum", pron: "/ˈləʊkl ˈmɪnɪməm/", def: "A point in the cost function space where the value is lower than its immediate neighbours, but not necessarily the global minimum." },
+      { term: "Global Minimum", pron: "/ˈɡləʊbl ˈmɪnɪməm/", def: "The lowest possible value of a cost function over the entire parameter space; the ultimate goal of optimisation." },
+      { term: "Saddle Point", pron: "/ˈsædl pɔɪnt/", def: "A point in the optimisation space that is a local minimum from some directions and a local maximum from others; can slow convergence." },
+      { term: "Convex Function", pron: "/ˈkɒnveks ˈfʌŋkʃn/", def: "A function where any local minimum is also the global minimum; optimisation is simpler and guaranteed." },
+      { term: "Non‑convex Optimisation", pron: "/nɒn ˈkɒnveks ˌɒptɪmaɪˈzeɪʃn/", def: "Optimisation of functions that may have multiple local minima; common in training deep neural networks." }
+    ];
+
+    // Sort alphabetically by English term
+    TERMS.sort((a, b) => a.term.localeCompare(b.term, 'en'));
+
+    // ═══════════════════════════════════════════
+    //  STATE
+    // ═══════════════════════════════════════════
+    const S = { q: '', letter: 'all' };
+
+    // ═══════════════════════════════════════════
+    //  UTILITIES
+    // ═══════════════════════════════════════════
+    function esc(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function highlight(text, q) {
+      if (!q) return esc(text);
+      const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      return esc(text).replace(re, '<mark class="hl">$1</mark>');
+    }
+
+    // ═══════════════════════════════════════════
+    //  LETTER NAV (English alphabet)
+    // ═══════════════════════════════════════════
+    function buildLetterNav() {
+      const nav = document.getElementById('letterNav');
+      const present = new Set(TERMS.map(t => t.term[0].toUpperCase()));
+
+      nav.querySelector('[data-l="all"]').addEventListener('click', () => setLetter('all'));
+
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+      letters.forEach(l => {
+        const btn = document.createElement('button');
+        const hasTerm = present.has(l);
+        btn.className = 'lnav-btn' + (hasTerm ? '' : ' no-terms');
+        btn.dataset.l = l;
+        btn.textContent = l;
+        if (hasTerm) btn.addEventListener('click', () => setLetter(l));
+        nav.appendChild(btn);
+      });
+    }
+
+    function setLetter(l) {
+      S.letter = l;
+      S.q = '';
+      document.getElementById('searchInput').value = '';
+      updateNavActive();
+      render();
+    }
+
+    function updateNavActive() {
+      document.querySelectorAll('.lnav-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.l === S.letter);
+      });
+    }
+
+    // ═══════════════════════════════════════════
+    //  FILTER
+    // ═══════════════════════════════════════════
+    function getFiltered() {
+      const q = S.q.trim().toLowerCase();
+      return TERMS.filter(t => {
+        const ml = S.letter === 'all' || t.term[0].toUpperCase() === S.letter;
+        const mq = !q || t.term.toLowerCase().includes(q) || t.def.toLowerCase().includes(q);
+        return ml && mq;
+      });
+    }
+
+    // ═══════════════════════════════════════════
+    //  RENDER
+    // ═══════════════════════════════════════════
+    function render() {
+      const items = getFiltered();
+      const area = document.getElementById('termsArea');
+      const showGroups = S.letter === 'all' && !S.q;
+
+      document.getElementById('bCount').textContent = items.length;
+      document.getElementById('bTotal').textContent = TERMS.length;
+      document.getElementById('chipCount').textContent = TERMS.length;
+
+      if (!items.length) {
+        area.innerHTML = `<div class="empty">
+          <span class="empty-char">∅</span>
+          <h3>No terms found</h3>
+          <p>Try a different keyword or choose a letter from the alphabet.</p>
+        </div>`;
+        return;
+      }
+
+      const groups = {};
+      items.forEach(t => {
+        const l = t.term[0].toUpperCase();
+        if (!groups[l]) groups[l] = [];
+        groups[l].push(t);
+      });
+
+      let html = '';
+      Object.keys(groups).sort().forEach(l => {
+        html += `<div class="letter-group" id="grp-${l}">`;
+        if (showGroups) {
+          html += `<div class="group-header">
+            <div class="group-letter">${l}</div>
+            <div class="group-meta">
+              <div class="group-label">Letter group</div>
+              <div class="group-count">${groups[l].length} term${groups[l].length > 1 ? 's' : ''}</div>
+            </div>
+          </div>`;
+        }
+        html += `<div class="terms-grid">`;
+        groups[l].forEach((t, i) => {
+          html += `<div class="term-card" 
+                         data-term="${esc(t.term)}" 
+                         data-pron="${esc(t.pron)}" 
+                         data-def="${esc(t.def)}" 
+                         style="animation-delay:${i * 0.03}s">
+            <div class="tc-watermark">${l}</div>
+            <div class="tc-term">${highlight(t.term, S.q)}</div>
+            <div class="tc-pron">${esc(t.pron)}</div>
+            <div class="tc-def">${highlight(t.def, S.q)}</div>
+          </div>`;
+        });
+        html += `</div></div>`;
+      });
+
+      area.innerHTML = html;
+
+      document.querySelectorAll('.term-card').forEach(card => {
+        card.addEventListener('click', function() {
+          const term = this.dataset.term;
+          const pron = this.dataset.pron;
+          const def = this.dataset.def;
+          openModal(term, pron, def);
+        });
+      });
+    }
+
+    // ═══════════════════════════════════════════
+    //  MODAL
+    // ═══════════════════════════════════════════
+    function openModal(term, pron, def) {
+      document.getElementById('modalTermTitle').innerHTML = `<span class="lime">●</span> ${term}`;
+      document.getElementById('modalTermPron').textContent = pron;
+      document.getElementById('modalTermDef').textContent = def;
+      document.getElementById('termModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('termModal').classList.remove('active');
+    }
+
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('termModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // ═══════════════════════════════════════════
+    //  EVENTS
+    // ═══════════════════════════════════════════
+    document.getElementById('searchInput').addEventListener('input', e => {
+      S.q = e.target.value.trim();
+      S.letter = 'all';
+      updateNavActive();
+      render();
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      S.q = '';
+      S.letter = 'all';
+      document.getElementById('searchInput').value = '';
+      updateNavActive();
+      render();
+    });
+
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault();
+        document.getElementById('searchInput').focus();
+      }
+      if (e.key === 'Escape') {
+        if (!document.getElementById('termModal').classList.contains('active')) {
+          S.q = '';
+          document.getElementById('searchInput').value = '';
+          render();
+        }
+      }
+    });
+
+    // ═══════════════════════════════════════════
+    //  BUILD SUPPLEMENTARY SECTION (static, with pronunciations)
+    // ═══════════════════════════════════════════
+    function buildSupplementary() {
+      const supp = [
+        { term: "Breadth‑First Search (BFS)", pron: "/bredθ fɜːrst sɜːrtʃ/", def: "A search algorithm that explores a graph or tree level by level, from the closest node to the farthest; finds the shortest unweighted path." },
+        { term: "Depth‑First Search (DFS)", pron: "/depθ fɜːrst sɜːrtʃ/", def: "A search algorithm that explores as far as possible along a branch before backtracking; uses less memory than BFS." },
+        { term: "A* Search", pron: "/eɪ stɑːr sɜːrtʃ/", def: "An informed search algorithm that combines path cost and a heuristic to find the optimal path efficiently." },
+        { term: "Greedy Best‑First Search", pron: "/ˈɡriːdi best fɜːrst sɜːrtʃ/", def: "A search algorithm that selects the node appearing closest to the goal based on a heuristic; fast but not guaranteed optimal." },
+        { term: "Hill Climbing", pron: "/hɪl ˈklaɪmɪŋ/", def: "A local search algorithm that moves towards a neighbour with a better value at each step; can get stuck in local optima." },
+        { term: "Simulated Annealing", pron: "/ˈsɪmjəleɪtɪd əˈniːlɪŋ/", def: "A meta‑heuristic search that occasionally accepts worse solutions (with decreasing probability) to escape local minima." },
+        { term: "Genetic Algorithm", pron: "/dʒəˈnetɪk ˈælɡərɪðəm/", def: "An optimisation meta‑heuristic inspired by natural evolution, using selection, crossover, and mutation over generations." },
+        { term: "Beam Search", pron: "/biːm sɜːrtʃ/", def: "A version of greedy search that keeps only the best k paths at each step; widely used in text generation with language models." },
+        { term: "Minimax", pron: "/ˈmɪnɪmæks/", def: "A decision‑making algorithm for two‑player games that chooses the move which maximises the player's minimum guaranteed gain, assuming optimal opponent play." },
+        { term: "Alpha‑Beta Pruning", pron: "/ˈælfə ˈbeɪtə ˈpruːnɪŋ/", def: "An optimisation of minimax that prunes unnecessary branches of the game tree without changing the final result." },
+        { term: "Dijkstra's Algorithm", pron: "/ˈdaɪkstrəz ˈælɡərɪðəm/", def: "An algorithm for finding the shortest path from a source node to all other nodes in a graph with non‑negative edge weights." },
+        { term: "Gradient Descent Algorithm", pron: "/ˈɡreɪdiənt dɪˈsent ˈælɡərɪðəm/", def: "The core optimisation algorithm in ML that iteratively updates model parameters in the negative direction of the cost function's gradient." },
+        { term: "Random Forest Algorithm", pron: "/ˈrændəm ˈfɒrɪst ˈælɡərɪðəm/", def: "An ensemble algorithm that builds multiple independent decision trees and combines their votes for higher accuracy and stability." },
+        { term: "K‑Means Algorithm", pron: "/keɪ miːnz ˈælɡərɪðəm/", def: "An iterative clustering algorithm that updates cluster centres to minimise the sum of distances of points to their assigned centre." },
+        { term: "Q‑Learning Algorithm", pron: "/kjuː ˈlɜːrnɪŋ ˈælɡərɪðəm/", def: "A model‑free reinforcement learning algorithm that updates a state‑action value table to reach an optimal policy." },
+        { term: "Backpropagation Algorithm", pron: "/ˈbækˌprɒpəˈɡeɪʃn ˈælɡərɪðəm/", def: "The central algorithm for training neural networks, propagating error gradients backward using the chain rule." }
+      ];
+
+      const grid = document.getElementById('suppGrid');
+      let html = '';
+      supp.forEach((t, i) => {
+        html += `<div class="term-card" 
+                        data-term="${esc(t.term)}" 
+                        data-pron="${esc(t.pron)}" 
+                        data-def="${esc(t.def)}"
+                        style="animation-delay:${i * 0.03}s">
+          <div class="tc-watermark">${t.term[0].toUpperCase()}</div>
+          <div class="tc-term">${esc(t.term)}</div>
+          <div class="tc-pron">${esc(t.pron)}</div>
+          <div class="tc-def">${esc(t.def)}</div>
+        </div>`;
+      });
+      grid.innerHTML = html;
+
+      // Add click events to supplementary cards too
+      document.querySelectorAll('#suppGrid .term-card').forEach(card => {
+        card.addEventListener('click', function() {
+          openModal(this.dataset.term, this.dataset.pron, this.dataset.def);
+        });
+      });
+    }
+
+    // ═══════════════════════════════════════════
+    //  BOOT
+    // ═══════════════════════════════════════════
+    buildLetterNav();
+    render();
+    buildSupplementary();
+  </script>
+</body>
+</html>
